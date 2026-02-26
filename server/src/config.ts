@@ -1,7 +1,10 @@
 import dotenv from "dotenv";
-import { resolve } from "path";
+import { resolve, dirname } from "path";
+import { fileURLToPath } from "url";
 
-dotenv.config({ path: resolve(import.meta.dirname, "../../.env") });
+// Support both local .env and platform env vars (Render etc.)
+const __dirname = import.meta.dirname ?? dirname(fileURLToPath(import.meta.url));
+dotenv.config({ path: resolve(__dirname, "../../.env") });
 
 export const config = {
   feishu: {
