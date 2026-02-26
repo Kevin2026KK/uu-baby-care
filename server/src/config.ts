@@ -16,7 +16,7 @@ export const config = {
     tableId: process.env.BITABLE_TABLE_ID!,
   },
   server: {
-    port: parseInt(process.env.SERVER_PORT || "3001"),
+    port: parseInt(process.env.PORT || process.env.SERVER_PORT || "3001"),
   },
   auth: {
     editorCode: process.env.ACCESS_CODE_EDITOR || "editor123",
