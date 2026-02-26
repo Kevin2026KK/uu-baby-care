@@ -1,0 +1,9 @@
+{
+  "name": "UU记录本",
+  "short_name": "UU记录本",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f8f4f0",
+  "theme_color": "#f8f4f0",
+  "icons": []
+}

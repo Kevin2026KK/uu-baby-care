@@ -1,0 +1,9 @@
+{
+  "name": "baby-care",
+  "private": true,
+  "workspaces": ["server", "web"],
+  "scripts": {
+    "build": "npm run build -w web",
+    "start": "npm run start -w server"
+  }
+}
