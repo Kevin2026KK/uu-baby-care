@@ -8,16 +8,21 @@ const loading = ref(false);
 let tempId = 0;
 
 export function useRecords() {
-  async function fetchRecords() {
+  async function fetchRecords(retries = 3) {
     loading.value = true;
-    try {
-      const res = await api.listRecords(50);
-      records.value = res.records;
-    } catch (err) {
-      console.error("Failed to fetch records:", err);
-    } finally {
-      loading.value = false;
+    for (let i = 0; i < retries; i++) {
+      try {
+        const res = await api.listRecords(50);
+        records.value = res.records;
+        return;
+      } catch (err) {
+        console.error(`Fetch records attempt ${i + 1} failed:`, err);
+        if (i < retries - 1) {
+          await new Promise((r) => setTimeout(r, 3000));
+        }
+      }
     }
+    loading.value = false;
   }
 
   async function addRecord(type: EventType, note?: string, time?: number): Promise<boolean> {

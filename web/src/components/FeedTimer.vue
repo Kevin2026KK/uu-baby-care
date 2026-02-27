@@ -27,19 +27,25 @@ const statusText = computed(() => {
   return `已超时 ${overdue}分钟`;
 });
 
-async function refresh() {
-  try {
-    const res = await api.getLatestFeed();
-    if (res.record) {
-      lastFeedTime.value = res.record.time;
-      minutesSince.value = res.minutesSince;
-      nextFeedIn.value = res.nextFeedIn;
+async function refresh(retries = 3) {
+  for (let i = 0; i < retries; i++) {
+    try {
+      const res = await api.getLatestFeed();
+      if (res.record) {
+        lastFeedTime.value = res.record.time;
+        minutesSince.value = res.minutesSince;
+        nextFeedIn.value = res.nextFeedIn;
+      }
+      loading.value = false;
+      return;
+    } catch (err) {
+      console.error(`Feed timer attempt ${i + 1} failed:`, err);
+      if (i < retries - 1) {
+        await new Promise((r) => setTimeout(r, 3000));
+      }
     }
-  } catch (err) {
-    console.error("Failed to fetch feed timer:", err);
-  } finally {
-    loading.value = false;
   }
+  loading.value = false;
 }
 
 onMounted(() => {
